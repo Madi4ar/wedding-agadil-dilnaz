@@ -65,12 +65,41 @@
       color: #b2228c;
       margin-top: 5px;
     }
+
+    #sound-toggle {
+      position: fixed;
+      bottom: 50px;
+      left: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 9999;
+    }
+
+    #sound-toggle img {
+      width: 24px;
+      height: 24px;
+    }
   </style>
   <body class="relative font-['Comfortaa'] bg-[#FFF3FB]">
+    <div id="sound-toggle">
+      <img
+        id="sound-icon"
+        src="https://cdn-icons-png.flaticon.com/512/727/727245.png"
+        alt="Sound Icon" />
+    </div>
+
+    <!-- Аудио -->
     <audio
       id="bg-music"
       src="images/mona-songz-senen-basa_(muzzonas.ru).mp3"
-      autoplay
       loop></audio>
 
     <div class="h-screen w-full relative">
@@ -412,18 +441,27 @@
         });
       });
 
-      document.addEventListener('DOMContentLoaded', () => {
-        const audio = document.getElementById('bg-music');
+      const audio = document.getElementById('bg-music');
+      const soundToggle = document.getElementById('sound-toggle');
+      const soundIcon = document.getElementById('sound-icon');
 
-        // Слушаем первое действие пользователя
-        const enableAudio = () => {
+      let isPlaying = false;
+
+      soundToggle.addEventListener('click', () => {
+        if (isPlaying) {
+          audio.pause();
+          soundIcon.src =
+            'https://cdn-icons-png.flaticon.com/512/727/727240.png'; // выключен
+        } else {
           audio
             .play()
-            .catch((e) => console.log('Автовоспроизведение заблокировано'));
-          document.removeEventListener('click', enableAudio);
-        };
-
-        document.addEventListener('click', enableAudio);
+            .then(() => {
+              soundIcon.src =
+                'https://cdn-icons-png.flaticon.com/512/727/727245.png'; // включен
+            })
+            .catch((e) => console.log('Ошибка воспроизведения:', e));
+        }
+        isPlaying = !isPlaying;
       });
     </script>
   </body>
